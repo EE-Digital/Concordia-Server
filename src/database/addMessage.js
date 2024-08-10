@@ -4,7 +4,8 @@ module.exports = async (message) => {
 	let conn;
 	try {
 		conn = await pool.getConnection();
-		conn.query("INSERT INTO messages VALUES (0,?)", [message]);
+		const timestamp = Date.now();
+		conn.query("INSERT INTO messages VALUES (?,?)", [timestamp,message]);
 		return message;
 	} catch (err) {
 		throw err;

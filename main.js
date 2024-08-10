@@ -1,22 +1,34 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const app = express();
-const fs = require("fs");
-const path = require("path");
+const cluster = require("cluster");
+const os = require("os");
 
-// Make sure that json gets parsed correctly
-app.use(express.json());
-app.use(cors());
+var maxWorkers = os.cpus().length;
 
-// Load all endpoints
-const endpoints = path.join(__dirname, "src/api");
-fs.readdirSync(endpoints).forEach((file) => {
-	const endpoint = require(path.join(endpoints, file));
-	endpoint(app);
+function _fork(count) {
+	for (let i = 0; i < count; i++) {
+		if (Object.values(cluster.workers).length < maxWorkers) {
+			cluster.fork();
+		}
+	}
+}
+
+cluster.schedulingPolicy = cluster.SCHED_RR;
+
+cluster.setupPrimary({
+	exec: "./src/handlers/worker.js",
+	args: ["--use", "https"],
 });
 
-// Start listening
-app.listen(process.env.PORT, () => {
-	console.log(`App listening on port ${process.env.PORT}`);
+_fork(maxWorkers / 2);
+
+cluster.on("exit", (worker, code, signal) => {
+	console.warn(`W:[PR] Worker died [${worker.process.pid}]`);
+	if (Object.values(cluster.workers).length < 1) {
+		// Always keep at least 1 process running
+		_fork(1);
+	}
+});
+
+cluster.on("message", (data, message) => {
+	_fork(1);
 });

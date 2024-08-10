@@ -4,7 +4,11 @@ module.exports = async () => {
 	let conn;
 	try {
 		conn = await pool.getConnection();
-		return await conn.query("SELECT * FROM messages");
+		let messages = await conn.query("SELECT * FROM messages");
+		messages.forEach(message => {
+			message.id = Number(message.id)
+		});
+		return messages; 
 	} catch (err) {
 		throw err;
 	} finally {
