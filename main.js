@@ -36,10 +36,8 @@ function forkWorkers(count) {
 }
 
 
-
 // Fork half of the available CPU cores
-// forkWorkers(Math.ceil(maxWorkers / 2));
-forkWorkers(1);
+forkWorkers(Math.floor(maxWorkers / 2));
 
 // Handle worker exit
 cluster.on("exit", (worker, code, signal) => {

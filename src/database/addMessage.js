@@ -9,7 +9,7 @@ module.exports = async (message, channel) => {
 		return {
 			id: timestamp,
 			text: message,
-			channel: channel
+			channel: parseInt(channel)
 		};
 	} catch (err) {
 		throw err;
