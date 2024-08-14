@@ -1,14 +1,14 @@
 const pool = require("../handlers/mariadb");
 
-module.exports = async () => {
+module.exports = async (channel) => {
 	let conn;
 	try {
 		conn = await pool.getConnection();
-		let messages = await conn.query("SELECT * FROM messages");
+		let messages = await conn.query("SELECT * FROM messages WHERE channel=?", [channel]);
 		messages.forEach(message => {
 			message.id = Number(message.id)
 		});
-		return messages; 
+		return messages;
 	} catch (err) {
 		throw err;
 	} finally {

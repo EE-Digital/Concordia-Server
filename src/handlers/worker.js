@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 	requestCounter++;
 	if (requestCounter > 15) {
 		cluster.worker.send("REQ[Fork]"); // Request a new fork
-		console.log(`I:[${process.pid}] requests per minute = ${requestCounter}`);
+		console.log(`I:[${process.pid}] requests per minute ${requestCounter}`);
 	}
 	next();
 });
@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 
 // Start listening
 server.listen(process.env.PORT, () => {
-	console.log(`Worker process is running on port ${process.env.PORT}`);
+	console.log(`I:[${process.pid}] is running on port ${process.env.PORT}`);
 });
 
 
