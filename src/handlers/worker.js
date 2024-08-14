@@ -1,8 +1,45 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const app = express();
 const fs = require("fs");
 const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
+const { setupWorker } = require("@socket.io/sticky");
+const { createAdapter } = require("@socket.io/cluster-adapter");
+const cluster = require("cluster");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+	cors: {
+		origin: ["*", "http://localhost:8081"],
+		methods: ["GET", "POST"],
+		allowedHeaders: ['*'],
+		credentials: true,
+		transports: ["websocket"],
+		rejectUnauthorized: false
+	},
+	allowEIO3: true
+});
+
+// Use the cluster adapter for Socket.IO
+io.adapter(createAdapter());
+setupWorker(io);
+
+// Setup middleware
+app.use(cors());
+app.use(express.json());
+
+// Load API endpoints
+const endpoints = path.join(__dirname, "../api");
+fs.readdirSync(endpoints).forEach((file) => {
+	const endpoint = require(path.join(endpoints, file));
+	endpoint(app, io);
+});
+
+// WebSocket connection handling
+require("./websocket")(io);
 
 let requestCounter = 0;
 
@@ -16,26 +53,18 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Make sure that json gets parsed correctly
-app.use(express.json());
-app.use(cors());
-
-// Load all endpoints
-const endpoints = path.join(__dirname, "../api");
-fs.readdirSync(endpoints).forEach((file) => {
-	const endpoint = require(path.join(endpoints, file));
-	endpoint(app);
-});
 
 // Start listening
-app.listen(process.env.PORT, () => {
-	console.log(`App listening on port ${process.env.PORT}`);
+server.listen(process.env.PORT, () => {
+	console.log(`Worker process is running on port ${process.env.PORT}`);
 });
+
 
 // Remove a request every second from counter
 setInterval(() => {
 	if (requestCounter > 0) requestCounter--;
 }, 1000); // 1 second
+
 
 //! Kill workr after ttl of inactivity
 setTimeout(() => {
