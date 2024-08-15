@@ -1,12 +1,16 @@
 module.exports = (app, io) => {
-	app.post("/add-message", async (req, res) => {
+	app.post("/channels/:channel/messages", async (req, res) => {
 		const addMessage = require("../database/addMessage");
-		const { message, channel } = req.body;
+		const { message, user } = req.body;
+		const { channel } = req.params;
 
 		if (!message || !channel)
 			return res.status(400).send({ message: `Missing: ${!channel ? 'channel ID' : 'message content'}` });
 
-		const newMessage = await addMessage(message, channel);
+		if (!user || !user.id)
+			return res.status(400).send({ message: `Missing userID!` });
+
+		const newMessage = await addMessage(message, channel, user);
 
 		io.emit('update', newMessage);
 
