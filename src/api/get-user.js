@@ -8,6 +8,7 @@ module.exports = (app, io) => {
         if (!accesstoken) return res.status(403).send({ message: "Missing access token!" });
 
         const user = await getUser(accesstoken, id);
+
         return res.status(200).send(user);
     });
 };
