@@ -13,7 +13,8 @@ module.exports = async (user) => {
 
         const token = (await conn.query("SELECT token FROM tokens WHERE id=?", [search.id]))[0];
 
-        return token
+        const server = require('../../config.json');
+        return { token: token.token, server: server };
     } catch (err) {
         throw err;
     } finally {
