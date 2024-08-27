@@ -1,6 +1,8 @@
+const respond = require('../scripts/respond')
+
 module.exports = (app, io) => {
 	app.post("/channels/:channel/messages", async (req, res) => {
-		const addMessage = require("../database/addMessage");
+		const addMessage = require("../database/channels_messages_add");
 		const { message } = req.body;
 		const { channel } = req.params;
 		const { accesstoken } = req.headers;
@@ -13,11 +15,9 @@ module.exports = (app, io) => {
 
 		const newMessage = await addMessage(message, channel, accesstoken);
 
-		io.emit('update', newMessage);
+		respond(newMessage, res);
 
-		res.send({
-			status: 200,
-			message: newMessage,
-		});
+		if (newMessage.status) return;
+		io.emit('update', newMessage);
 	});
 };

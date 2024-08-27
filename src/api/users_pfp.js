@@ -1,5 +1,5 @@
 const multer = require('multer');
-const setProfilePicture = require('../database/setProfilePicture');
+const setProfilePicture = require('../database/user_pfp');
 const respond = require('../scripts/respond');
 const upload = multer({ dest: process.env.UPLOAD_PATH })
 

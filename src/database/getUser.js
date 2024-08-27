@@ -7,7 +7,7 @@ module.exports = async (accessToken, id) => {
         let user;
 
         if (accessToken)
-            user = await conn.query("SELECT u.* FROM users u JOIN accessTokens at ON u.id = at.user WHERE at.token=?", [accessToken]);
+            user = await conn.query("SELECT u.* FROM users u JOIN tokens at ON u.id = at.id WHERE at.token=?", [accessToken]);
         else
             user = await conn.query("SELECT * FROM users WHERE id=?", [id]);
         user = user[0];

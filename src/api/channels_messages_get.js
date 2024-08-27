@@ -1,4 +1,4 @@
-const getMessage = require("../database/getMessage");
+const getMessage = require("../database/channels_messages_get");
 
 module.exports = (app, io) => {
 	app.get("/channels/:channel/messages", async (req, res) => {
