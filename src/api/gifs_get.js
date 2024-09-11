@@ -33,6 +33,7 @@ async function getGiphyGif(id, res) {
     try {
         const response = await fetch(`https://api.giphy.com/v1/gifs/${id}?api_key=${process.env.GIPHY_TOKEN}&rating=g`)
         const json = await response.json();
+        if (response.status == 429) return res.send("Rate limit reached");
         if (response.status != 200)
             return res.stauts(404).send({ message: "Gif not found!" });
         res.send({
