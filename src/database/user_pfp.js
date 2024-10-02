@@ -20,7 +20,6 @@ module.exports = async (accessToken, filePath) => {
 
         // If exists delete
         if (user.profilePicture && fs.existsSync(path.join(process.env.UPLOAD_PATH, user.profilePicture))) {
-
             fs.unlinkSync(path.join(process.env.UPLOAD_PATH, user.profilePicture));
         }
 
