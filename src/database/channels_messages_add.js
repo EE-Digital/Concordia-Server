@@ -18,7 +18,7 @@ module.exports = async (message, channel, accessToken) => {
 		result.id = result.id.toString();
 		result.user = user;
 		result.user.username = username[0].username;
-		console.log(result);
+
 
 		return result;
 	} catch (err) {
