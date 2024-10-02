@@ -1,6 +1,6 @@
 {
-    "ip": "https://api.staryhub.net",
-	"title": "StaryHub",
-	"description": "Official server for staryhub",	
-	"iconURL": "https://i.pinimg.com/564x/39/7d/d7/397dd71b5bb0541f5351a1f93bd93ad6.jpg"
+	"ip": "http://localhost:3000",
+	"title": "LocalHostServer",
+	"description": "My local little test server",
+	"iconURL": "https://i.pinimg.com/736x/5a/c6/54/5ac654cb3416543ce20f4ade3ce812d8.jpg"
 }

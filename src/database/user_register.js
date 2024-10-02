@@ -22,7 +22,11 @@ module.exports = async (user) => {
         const token = Date.now() + '-' + makeId(16) + '-' + makeId(16);
         await conn.query("INSERT INTO tokens VALUES (?,?)", [token, user.id]);
 
-        const server = require('../../config.json');
+        let server = require('../../config.json');
+
+        // Get server channels
+        const channels = await conn.query("SELECT * FROM channels");
+        server.channels = channels;
         return { token: token, server: server };
     } catch (err) {
         throw err;
