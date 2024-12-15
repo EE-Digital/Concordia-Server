@@ -1,12 +1,14 @@
 const mariadb = require("mariadb");
+
 const pool = mariadb.createPool({
-	host: process.env.HOST,
+	host: process.env.DB_HOST,
 	port: "3306",
-	user: process.env.USER,
-	password: process.env.PASSWORD,
-	database: "concordia",
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_DATABASE,
 	connectionLimit: 5,
-	acquireTimeout: 1000,
+	acquireTimeout: 1000
 });
 
 module.exports = pool;
+
