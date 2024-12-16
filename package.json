@@ -6,9 +6,9 @@
 		"start": "node .",
 		"setup": "sh ./setup.sh"
 	},
-	"author": "",
+	"author": "E&E Digital s.r.o.",
 	"license": "ISC",
-	"description": "",
+	"description": "Concordia server",
 	"dependencies": {
 		"@socket.io/cluster-adapter": "^0.2.2",
 		"@socket.io/sticky": "^1.0.4",
