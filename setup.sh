@@ -1,5 +1,9 @@
 #! Run this setup file only once, it will delete all the data in the database if there is one already!
 
+# Remove .example addition
+mv .env.example .env
+mv config.json.example config.json
+
 # Load variables from .env
 export $(grep -v '^#' .env | xargs)
 echo Loaded variables from .env file
