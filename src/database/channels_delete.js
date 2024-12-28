@@ -1,6 +1,6 @@
 const pool = require("../handlers/mariadb");
 
-module.exports = async (title, accesstoken) => {
+module.exports = async (id, accesstoken) => {
     let conn;
     try {
         conn = await pool.getConnection();
@@ -13,7 +13,7 @@ module.exports = async (title, accesstoken) => {
         });
         if (!permission) return { status: 403, message: "Missing permissions!" }
 
-        await conn.query("INSERT INTO channels(title) VALUES (?) RETURNING *", [title]); // Add channel
+        await conn.query("DELETE FROM channels WHERE id=?", [id]); // Remove channel
 
         const updatedChannels = (await conn.query("SELECT * FROM channels"));
 
