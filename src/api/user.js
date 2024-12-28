@@ -1,4 +1,5 @@
-const getUser = require("../database/getUser");
+const getUser = require("../database/user");
+const respond = require("../scripts/respond");
 
 module.exports = (app, io) => {
     app.get("/users/:id", async (req, res) => {
@@ -9,6 +10,6 @@ module.exports = (app, io) => {
 
         const user = await getUser(accesstoken, id);
 
-        return res.status(200).send(user);
+        return respond(user, res);
     });
 };

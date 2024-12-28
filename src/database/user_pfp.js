@@ -1,6 +1,6 @@
 const path = require("path");
 const pool = require("../handlers/mariadb");
-const getUser = require("./getUser");
+const getUser = require("./user");
 const fs = require('fs')
 
 module.exports = async (accessToken, filePath) => {
